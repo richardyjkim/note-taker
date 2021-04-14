@@ -17,21 +17,36 @@ app.get('/', (req, res) => {
 
 app.get('/notes', (req, res) => {
   loadPage(res);
-
+  console.log(req.params);
 });
 
 app.get('/api/notes', (req, res) => {
-  res.json(note);
+  res.json(note)
 });
 
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, "./Develop/public/index.html"));
 })
 
+// Retrive
+app.get('/api/notes:id', (req, res) => {
+  res.json(notes[req.params.id]);
+  console.log(res.json(notes[res.params]));
+})
+
 // app.post
 app.post('/api/notes', (req, res) => {
   let newNote = req.body;
   let notePath = path.join(__dirname, './Develop/db/db.json');
+  let noteId = 0;
+  for (let i = 0; i < note.length; i++) {
+    let singleNote = note[i];
+
+    if (singleNote.id > noteId) {
+      noteId = singleNote.id
+    }
+  }
+  newNote.id = noteId + 1
   note.push(newNote);
   fs.writeFile(notePath, JSON.stringify(note), err => {
     if (err) {
