@@ -17,7 +17,6 @@ app.get('/', (req, res) => {
 
 app.get('/notes', (req, res) => {
   loadPage(res);
-  console.log(req.params);
 });
 
 app.get('/api/notes', (req, res) => {
@@ -31,7 +30,6 @@ app.get('*', (req, res) => {
 // Retrive
 app.get('/api/notes:id', (req, res) => {
   res.json(notes[req.params.id]);
-  console.log(res.json(notes[res.params]));
 })
 
 // app.post
@@ -55,8 +53,26 @@ app.post('/api/notes', (req, res) => {
     console.log("Note successfully saved");
   })
   res.json(newNote);
-  loadPage(res);
 });
+
+//app.delete
+app.delete('/api/notes/:id', (req, res) => {
+  let notePath = path.join(__dirname, './Develop/db/db.json');
+
+  note.forEach((noteElement, index) => {
+    if (noteElement["id"] == req.params.id) {
+      note.splice(index, 1);
+    }
+  });
+
+  fs.writeFile(notePath, JSON.stringify(note), err => {
+    if (err) {
+      return console.log(err)
+    }
+    console.log("Note successfully deleted");
+  })
+  loadPage(res);
+})
 
 app.listen(PORT, () => {
   console.log(`API server now on port ${PORT}`);
